@@ -55,9 +55,18 @@ Exit from container
 exit
 ```
 
-## 3-Run FVP
+## 3-Boot FVP and create a VM
 To run FVP for a particular experiment (for example base experiment):
 ```
 ./scripts/run-shrinkwrap.sh -e base
 ```
+The above opens a command line terminal for you. Now you have access to the file system created in the previous parts. 
+If you are running the base experiment, there are several scripts to create a VM. For example running the following command will create 
+a realm VM:
+
+```
+/root/create_realm_VM_100.sh
+```
+
 ## 4-Evalution
+
