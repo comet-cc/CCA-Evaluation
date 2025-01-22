@@ -1,0 +1,184 @@
+# Copyright (c) 2023, ARM Limited and Contributors. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# Redistributions of source code must retain the above copyright notice, this
+# list of conditions and the following disclaimer.
+#
+# Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# Neither the name of ARM nor the names of its contributors may be used
+# to endorse or promote products derived from this software without specific
+# prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+
+# *** Toolchain definitions *** #
+
+# The environment variable TOOLCHAINS_PATH is set in the docker image and
+# points to the base path where multiple toolchains are available.
+# It is up to each component configuration to select the variant required
+# to build such component:
+# <COMPONENT>_GCC_PATH="${GCC_BASE_NAME}-${VARIANT_ELF}/bin"
+
+HOST_ARCH="$(uname -m)"
+# GCC
+GCC_VERSION="12.3.rel1"
+VARIANT_ELF="aarch64-none-elf"
+VARIANT_LINUX_GNU="aarch64-none-linux-gnu"
+GCC_BASE_NAME="${TC_PATH}/arm-gnu-toolchain-${GCC_VERSION}-${HOST_ARCH}"
+# CLANG+LLVM
+LLVM_PKG_X86="clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04"
+LLVM_PKG_AARCH64="clang+llvm-15.0.6-aarch64-linux-gnu"
+# *** End Toolchain *** #
+
+
+# *** RMM Options *** #
+RMM_PATH="${TOP_DIR}/rmm"
+RMM_BUILD_DIR="${RMM_PATH}/build"
+RMM_BUILD_TYPE=Debug
+RMM_LOG_LEVEL=40
+RMM_GCC_PATH="${GCC_BASE_NAME}-${VARIANT_ELF}/bin"
+RMM_OUT_BIN="${RMM_BUILD_DIR}/${RMM_BUILD_TYPE}/rmm.img"
+# *** End RMM *** #
+
+
+# *** Hafnium Options *** #
+HAFNIUM_PATH="${TOP_DIR}/hafnium"
+HAFNIUM_PREBUILT_CLANG="${TC_PATH}/${LLVM_PKG_X86}/bin/"
+HAFNIUM_PREBUILT_DTC="${HAFNIUM_PATH}/prebuilts/linux-x64/dtc"
+# If host arch is aarch64 change to appropriate folder locations
+if [ "$HOST_ARCH" == "aarch64" ]; then
+	HAFNIUM_PREBUILT_CLANG="${TC_PATH}/${LLVM_PKG_AARCH64}/bin/"
+	HAFNIUM_PREBUILT_DTC="${HAFNIUM_PATH}/prebuilts/linux-aarch64/dtc"
+fi
+# Do not change the path below, it is used by TF-A
+HAFNIUM_OUT_BIN="${HAFNIUM_PATH}/out/reference/secure_aem_v8a_fvp_vhe_clang/hafnium.bin"
+# *** End Hafnium *** #
+
+
+# *** TFTF Options *** #
+TFTF_RME_BUILD_ENABLED=1
+TFTF_PATH="${TOP_DIR}/tf-a-tests"
+TFTF_GCC_PATH="${GCC_BASE_NAME}-${VARIANT_ELF}/bin"
+TFTF_ARCH=aarch64
+TFTF_PLATS=fvp
+TFTF_BUILD_TYPE="debug" # debug=1, release=0
+TFTF_SP_LAYOUT="${TFTF_PATH}/build/fvp/${TFTF_BUILD_TYPE}/sp_layout.json"
+TFTF_STANDARD_TESTS=1
+# *** End TFTF *** #
+
+
+# *** TF-A Options *** #
+TF_A_RME_BUILD_ENABLED=1
+TF_A_PATH="${TOP_DIR}/tf-a"
+TF_A_GCC_PATH="${GCC_BASE_NAME}-${VARIANT_ELF}/bin"
+TF_A_ARCH=aarch64
+TF_A_PLATS=fvp
+TF_A_BUILD_TYPE="debug" # debug=1, release=0
+
+# TF-A 4-World
+TF_A_4W_FLAGS="\
+	ENABLE_RME=1 \
+	RMM=${RMM_OUT_BIN} \
+	ENABLE_SVE_FOR_NS=2 \
+	ENABLE_SVE_FOR_SWD=1 \
+	ARM_DISABLE_TRUSTED_WDOG=1 \
+	FVP_HW_CONFIG_DTS=fdts/fvp-base-gicv3-psci-1t.dts \
+	ARM_ARCH_MINOR=5 \
+	BRANCH_PROTECTION=1 \
+	CTX_INCLUDE_PAUTH_REGS=1 \
+	CTX_INCLUDE_EL2_REGS=1 \
+	PLAT_TEST_SPM=1 \
+	ENABLE_FEAT_MTE2=1 \
+	GIC_EXT_INTID=1 \
+	ENABLE_SME_FOR_SWD=1 \
+	SPD=spmd \
+	BL32=${HAFNIUM_OUT_BIN} \
+	SP_LAYOUT_FILE=${TFTF_SP_LAYOUT} 
+	"
+# ENABLE_FEAT_MTE2=1 \
+TF_A_PRELOADED_KERNEL="\
+	ARM_LINUX_KERNEL_AS_BL33=1 \
+	PRELOADED_BL33_BASE=0x84000000
+	"
+# *** End TF-A *** #
+
+
+# *** Linux Options *** #
+LINUX_RME_BUILD_ENABLED=1
+LINUX_ARCH=arm64
+LINUX_PATH="${TOP_DIR}/linux"
+LINUX_GCC_PATH="${GCC_BASE_NAME}-${VARIANT_LINUX_GNU}/bin"
+LINUX_CROSS_COMPILE=$VARIANT_LINUX_GNU-
+CROSS_COMPILE=$LINUX_CROSS_COMPILE
+# If host arch is aarch64 change to appropriate compiler
+if [ "$HOST_ARCH" == "aarch64" ]; then
+	LINUX_GCC_PATH="/usr/bin/gcc"
+	LINUX_CROSS_COMPILE=""
+fi
+LINUX_IMAGE=Image
+LINUX_CMD_LINE_EXTEND_PATCH="${TOP_DIR}/build-scripts/configs/aemfvp-a-rme/buildroot/patches/kconfig.patch"
+# *** End Linux *** #
+
+
+# *** KvmTool Options *** #
+KVM_TOOL_PATH="${TOP_DIR}/kvmtool"
+# *** End KvmTool *** #
+
+# *** Kvm Unit Tests *** #
+KVM_UNIT_TESTS_ARCH=arm64
+KVM_UNIT_TESTS_PATH="${TOP_DIR}/kvm-unit-tests"
+KVM_UNIT_TESTS_GCC_PATH="${GCC_BASE_NAME}-${VARIANT_LINUX_GNU}/bin"
+KVM_UNIT_CROSS_COMPILE=$VARIANT_LINUX_GNU-
+# If host arch is aarch64 change to appropriate compiler
+if [ "$HOST_ARCH" == "aarch64" ]; then
+	KVM_UNIT_TESTS_GCC_PATH="/usr/bin/gcc"
+	KVM_UNIT_CROSS_COMPILE=""
+fi
+# *** End Kvm Unit Tests *** #
+
+# *** Buildroot Options *** #
+# Note: buildroot builds kvmtool, the path for a rme enabled kvmtool is defined in KvmTool Options
+BUILDROOT_PATH="${TOP_DIR}/buildroot"
+BUILDROOT_GCC_PATH="${GCC_BASE_NAME}-${VARIANT_LINUX_GNU}/bin"
+BUILDROOT_CROSS_COMPILE=$VARIANT_LINUX_GNU-
+# If host arch is aarch64 change to appropriate compiler
+if [ "$HOST_ARCH" == "aarch64" ]; then
+	BUILDROOT_GCC_PATH="/usr/bin/gcc"
+	BUILDROOT_CROSS_COMPILE=""
+fi
+BUILDROOT_CONFIG_FILE="${TOP_DIR}/build-scripts/configs/aemfvp-a-rme/buildroot/2023.08.config"
+ROOTFS_OVERLAY="${TOP_DIR}/build-scripts/configs/aemfvp-a-rme/buildroot/rootfs_overlay"
+GUEST_NETWORK_UTILS="${TOP_DIR}/build-scripts/configs/aemfvp-a-rme/buildroot/utils"
+# *** End Buildroot *** #
+
+# Set output folder
+OUTPUT_PLATFORM_DIR="${TOP_DIR}/output/aemfvp-a-rme"
+
+# *** Add what is built *** #
+BUILD_SCRIPTS="\
+	build-rmm.sh \
+	build-hafnium.sh \
+	build-tftf.sh \
+	build-tf-a.sh \
+	build-kvm-unit-tests.sh \
+	build-linux.sh \
+	"
+
+#  build-linux.sh \   
+#build-buildroot.sh \	"

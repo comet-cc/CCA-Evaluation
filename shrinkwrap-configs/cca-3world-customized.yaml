@@ -1,0 +1,87 @@
+# Copyright (c) 2022, Arm Limited.
+# SPDX-License-Identifier: MIT
+
+concrete: true
+
+layers:
+  - cca-edk2.yaml
+#  - linux-base.yaml
+#  - kvmtool-base.yaml
+#  - kvm-unit-tests.yaml
+
+build:
+  rmm:
+     sourcedir: /home/netsys1/reset-project/rme-stack/rmm
+  linux:
+    build:
+      - echo sdsd >> ${param:builddir}/sdsd.txt
+    artifacts:
+  # dumy variable, we add kernel manually during runtime
+      KERNEL: ${param:builddir}/sdsd.txt
+
+  edk2-cca-guest:
+    repo:
+      edk2:
+        remote: https://git.gitlab.arm.com/linux-arm/edk2-cca.git
+        revision: 2802_arm_cca_rmm-v1.0-eac5-patch1
+
+    toolchain: aarch64-none-elf-
+
+    stderrfilt: true
+
+    prebuild:
+      - export WORKSPACE=${param:sourcedir}
+      - export GCC5_AARCH64_PREFIX=$$CROSS_COMPILE
+      - export PACKAGES_PATH=$$WORKSPACE/edk2
+      - export IASL_PREFIX=${artifact:ACPICA}/
+      - export PYTHON_COMMAND=/usr/bin/python3
+
+    params:
+      -a: AARCH64
+      -t: GCC5
+      -p: edk2/ArmVirtPkg/ArmVirtKvmTool.dsc
+      -b: RELEASE
+      --pcd: PcdShellDefaultDelay=0
+      ' --pcd': PcdPlatformBootTimeOut=0
+      '  --pcd': PcdUefiShellDefaultBootEnable=1
+
+    build:
+      - source edk2/edksetup.sh --reconfig
+      - make -j${param:jobs} -C edk2/BaseTools
+      - build -n ${param:jobs} -D EDK2_OUT_DIR=${param:builddir} ${param:join_space}
+
+    artifacts:
+      EDK2_CCA_GUEST: ${param:builddir}/RELEASE_GCC5/FV/KVMTOOL_EFI.fd
+
+
+buildex:
+  btvars:
+    GUEST_ROOTFS:
+      type: path
+      value: ''
+
+run:
+  rtvars:
+    KERNEL:
+      value: ${artifact:KERNEL}
+    GenericPATH:
+      type: path
+      value: null
+    TogglePATH:
+      type: path
+      value: null
+    TRACEDIR:
+      type: path
+      value: null
+
+
+  params:
+    -C cluster0.cpu1.enable_trace_special_hlt_imm16: 1
+    -C cluster0.cpu1.trace_special_hlt_imm16: 4919
+    ' --plugin': ${rtvar:GenericPATH}
+    -C TRACE.GenericTrace.trace-sources: FVP_Base_RevC_2xAEMvA.cluster0.cpu1.INST=0xea010
+    -C TRACE.GenericTrace.trace-file: ${rtvar:TRACEDIR}/trace_$$(date +"%s").txt
+    '  --plugin': ${rtvar:TogglePATH}
+    -C TRACE.ToggleMTIPlugin.use_hlt: 1
+    -C TRACE.ToggleMTIPlugin.hlt_imm16: 4919
+    -C TRACE.ToggleMTIPlugin.disable_mti_from_start: 1

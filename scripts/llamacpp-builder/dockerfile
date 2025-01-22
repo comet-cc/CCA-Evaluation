@@ -1,0 +1,89 @@
+#FROM arm64v8/ubuntu:focal
+FROM ubuntu:jammy
+
+ARG USER
+ARG UID
+ARG GID
+ARG MOUNT
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TC_PATH=/opt/toolchains
+ENV STACK=/home/${USER}/docker
+# Dependencies and utilities to build the image
+RUN set -e ;\
+    apt-get update -q=2 ;\
+    apt-get install -q=2 --yes --no-install-recommends \
+        curl \
+        gpg \
+        gpg-agent \
+        locales \
+        software-properties-common \
+        sudo \
+        vim \
+        nano \
+        wget ;\
+        rm -rf /var/lib/apt/lists/* ;
+
+# Add CMake Repository
+RUN set -e ;\
+    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
+        | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null ;\
+    add-apt-repository "deb https://apt.kitware.com/ubuntu/ jammy main" ;
+
+# Build dependencies
+RUN set -e ;\
+    add-apt-repository universe ;\
+    apt-get update -q=2 ;\
+    apt-get install -q=2 --yes --no-install-recommends \
+        acpica-tools \
+        autoconf \
+        automake \
+        autopoint \
+        bc \
+        bison \
+        build-essential \
+        cmake \
+        dosfstools \
+        expect \
+        file \
+        flex \
+        git \
+        make \
+        mtools \
+        rsync \
+        sbsigntool \
+        sshpass \
+	ccache \
+	qemu-system-arm \
+	qemu-efi-aarch64 \
+	qemu-utils \
+        zip ;\
+    apt-get -f install ;\
+    rm -rf /var/lib/apt/lists/* ;
+
+RUN set -e ;\
+    # Setup user
+    groupadd -g ${GID} ${USER};\
+    useradd --no-log-init -m -s /bin/bash ${USER} --uid ${UID} --gid ${GID};\
+    echo "${USER}:${USER}" | chpasswd ;\
+    echo "${USER} ALL = NOPASSWD: ALL" > /etc/sudoers.d/${USER} ;\
+    chmod 0440 /etc/sudoers.d/${USER} ;
+
+ENV LANG en_GB.UTF-8
+
+# Install repo tool
+RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo;\
+    chmod a+x /usr/bin/repo ;
+
+COPY ./qemu-system-aarch64 /usr/bin/qemu-system-aarch64
+COPY ./qemu-aarch64-static /usr/bin/qemu-aarch64-static
+COPY ./build-llamacpp-bin.sh $MOUNT/../build-llamacpp-bin.sh
+
+RUN set -e ;\
+    git config --global user.name "${USER}" ;\
+    git config --global user.email "${USER}@${USER}.com" ;\
+    git config --global color.ui false ;
+USER $USER
+ENV BUILD_SCRIPT=$MOUNT/../build-llamacpp-bin.sh
+#CMD ["/bin/bash"]
+CMD $BUILD_SCRIPT

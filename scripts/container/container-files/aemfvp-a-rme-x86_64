@@ -1,0 +1,182 @@
+# Copyright (c) 2023, ARM Limited and Contributors. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# Redistributions of source code must retain the above copyright notice, this
+# list of conditions and the following disclaimer.
+#
+# Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# Neither the name of ARM nor the names of its contributors may be used
+# to endorse or promote products derived from this software without specific
+# prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+FROM ubuntu:jammy
+
+ARG USER
+ARG UID
+ARG GID
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TC_PATH=/opt/toolchains
+ENV STACK=/home/${USER}/docker
+# Dependencies and utilities to build the image
+RUN set -e ;\
+    apt-get update -q=2 ;\
+    apt-get install -q=2 --yes --no-install-recommends \
+        curl \
+        gpg \
+        gpg-agent \
+        locales \
+        software-properties-common \
+        sudo \
+        vim \
+	nano \
+        wget ;\
+        rm -rf /var/lib/apt/lists/* ;
+
+# Add CMake Repository
+RUN set -e ;\
+    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
+        | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null ;\
+    add-apt-repository "deb https://apt.kitware.com/ubuntu/ jammy main" ;
+
+# Build dependencies
+RUN set -e ;\
+    add-apt-repository universe ;\
+    apt-get update -q=2 ;\
+    apt-get install -q=2 --yes --no-install-recommends \
+        acpica-tools \
+        autoconf \
+        automake \
+        autopoint \
+        bc \
+        bison \
+        build-essential \
+        cmake \
+        cpio \
+        device-tree-compiler \
+        dosfstools \
+        expect \
+        file \
+        flex \
+        fuseext2 \
+        gdisk \
+        genext2fs \
+        gettext \
+        git \
+        gperf \
+        libfdt1 \
+        libfdt-dev \
+        libncurses5 \
+        libtinfo5 \
+        libglib2.0-dev \
+        libxml-libxml-perl \
+        make \
+        mtools \
+        net-tools \
+        netcat-openbsd \
+        openssh-client \
+        parted \
+        pkg-config \
+        python3 \
+        python3-pip \
+        rsync \
+        sbsigntool \
+        sshpass \
+        telnet \
+        unzip \
+        uuid-dev \
+        xterm \
+	libc6-dev \
+	ninja-build \
+        zip ;\
+   rm -rf /var/lib/apt/lists/* ;
+
+RUN set -e ;\
+# Locale info needed to execute xterm
+	localedef -i en_GB -c -f UTF-8 -A /usr/share/locale/locale.alias en_GB.UTF-8 ;\
+# Make python3 default
+ln -s -f /usr/bin/python3 /usr/bin/python ;\
+# Setup user
+groupadd -g ${GID} ${USER};\
+useradd --no-log-init -m -s /bin/bash ${USER} --uid ${UID} --gid ${GID};\  
+echo "${USER}:${USER}" | chpasswd ;\
+echo "${USER} ALL = NOPASSWD: ALL" > /etc/sudoers.d/${USER} ;\                             
+chmod 0440 /etc/sudoers.d/${USER} ;
+ENV LANG en_GB.UTF-8
+# Update glibc to support hafnium 15.x build.
+
+RUN set -e ;\
+    apt-get update -q=2 ;\
+    add-apt-repository ppa:ubuntu-toolchain-r/test ;\
+    sudo apt-get -y update ;\
+    apt-get -y upgrade libstdc++6 ;\
+    rm -rf /var/lib/apt/lists/* ;
+
+
+# Install repo tool
+RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo ;\
+    chmod a+x /usr/bin/repo ;
+
+# Install openSSL
+ENV SSL_VERSION=3.0.8
+ENV SSL_CHKSUM=6c13d2bf38fdf31eac3ce2a347073673f5d63263398f1f69d0df4a41253e4b3e
+COPY ./container-files/install-openssl.sh /tmp
+RUN bash /tmp/install-openssl.sh ${SSL_VERSION} ${SSL_CHKSUM} ;
+
+# Install toolchains
+COPY ./container-files/install-gcc.sh /tmp
+COPY ./container-files/install-llvm.sh /tmp
+COPY ./container-files/install-e2fsck.sh /tmp
+
+# Newer gcc version in-line with hafnium and base aem release.
+RUN bash /tmp/install-gcc.sh ${TC_PATH} 12.3.rel1 aarch64-none-elf ;
+RUN bash /tmp/install-gcc.sh ${TC_PATH} 12.3.rel1 aarch64-none-linux-gnu ;
+
+RUN bash /tmp/install-llvm.sh ${TC_PATH} clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz ;
+
+# Update e2fsck version.
+RUN bash /tmp/install-e2fsck.sh ${TC_PATH} 1.47.0 ;
+
+USER $USER
+
+# FVP_Base_RevC-2xAEMvA_11.24_11_Linux64_armv8l.tgz
+# Install fvp files to FVPS dir.
+#COPY install-fvp.sh /tmp
+#RUN bash /tmp/install-fvp.sh 11.24_11_Linux64 FVP_Base_RevC-2xAEMvA ${FVP_DIR} ;
+
+# Install needed python scripts.
+RUN set -e ;\
+    pip3 install \
+        more-itertools \
+        pytest \
+	pytest-html \
+        --no-cache-dir meson==1.2.3 sphinx==5.3.0 sphinx_rtd_theme==1.1.1 \
+	PyYAML \
+	setuptools \    
+	spdx_lookup \    
+	tap.py ;
+
+RUN set -e ;\
+    git config --global user.name "${USER}" ;\
+    git config --global user.email "${USER}@${USER}.com" ;\
+    git config --global color.ui false ;
+
+CMD ["/bin/bash"]
+
