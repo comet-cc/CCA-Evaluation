@@ -40,16 +40,13 @@
 PARALLELISM1=20
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 QEMU_PATH="${DIR}/../qemu"
-KVMTOOL_PATH="${DIR}/../kvmtool"
+#KVMTOOL_PATH="${DIR}/../kvmtool"
 experiment="base"
-overlay=""
-while getopts "co:e:" opt; do
+clean_flag="0"
+while getopts "c:e:" opt; do
 	case $opt in
 	c)
 		clean_flag="1"
-		;;
-	o)
-		overlay=$OPTARG
 		;;
 	e)
 		experiment=$OPTARG
@@ -71,7 +68,7 @@ do_build ()
 	# Enable build of KvmTool & set up the path
 	cp ${BUILDROOT_CONFIG_FILE} .config
 	echo "KVMTOOL_OVERRIDE_SRCDIR = ${KVMTOOL_PATH}" > local.mk
-	echo "QEMU_OVERRIDE_SRCDIR = ${QEMU_PATH}" >> local.mk
+#	echo "QEMU_OVERRIDE_SRCDIR = ${QEMU_PATH}" >> local.mk
 	# Set the overlays needed on the host-fs
 	./utils/config --set-val BR2_ROOTFS_OVERLAY "\"${ROOTFS_OVERLAY}\""
 	./utils/config --set-val BR2_ROOTFS_POST_BUILD_SCRIPT "\"${POST_BUILD_SCRIPT}\""
@@ -109,7 +106,6 @@ do_package ()
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $DIR/aemfvp-a-rme
-#./customized-file-system/build-buildroot2.sh -o ${overlay}
 BUILDROOT_CONFIG_FILE="${DIR}/../overlay/hypervisor_buildroot_config_${experiment}"
 OUTPUT_PLATFORM_DIR="${DIR}/../output"
 ROOTFS_OVERLAY="${DIR}/../overlay/hypervisor_overlay_${experiment}"

@@ -48,8 +48,8 @@ Build the file systems of the hypervisor and the VM for a particular experiment 
 
 Build linux for both the hypervisor and the VM:
 ```
-./scripts/build-linux.sh
-./scripts/build-linux-guest.sh
+./scripts/build-linux.sh -e base
+./scripts/build-linux-guest.sh -e base
 ```
 
 Exit from container

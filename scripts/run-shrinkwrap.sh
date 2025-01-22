@@ -18,7 +18,7 @@ fi
 set -x
 
 shrinkwrap run cca-3world-reset.yaml \
---rtvar=KERNEL=$DIR/../output/Image \
+--rtvar=KERNEL=$DIR/../output/Image-$experiment \
 --rtvar=ROOTFS=$DIR/../output/host-fs-$experiment.ext4 \
 --rtvar=GenericPATH=$DIR/../plugins/GenericTrace.so \
 --rtvar=TogglePATH=$DIR/../plugins/ToggleMTIPlugin.so \

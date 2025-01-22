@@ -39,15 +39,12 @@
 #
 PARALLELISM1=20
 experiment="base"
-overlay=""
-while getopts "co:e:" opt; do
+clean_flag="0"
+while getopts "c:e:" opt; do
 	case $opt in
 		c)
 			clean_flag="1"
             		;;
-        	o)
-			overlay=$OPTARG
-			;;
          	e)
 			experiment=$OPTARG
 			;;
@@ -104,6 +101,7 @@ POST_BUILD_SCRIPT="${DIR}/../overlay/post_build_script2.sh"
 OUTPUT_PLATFORM_DIR="${DIR}/../overlay/hypervisor_overlay_${experiment}/root/VM_image"
 BUILDROOT_PATH="${DIR}/../buildroot2_${experiment}"
 SHARED="${DIR}/../overlay/shared_files"
+
 if [ "$clean_flag" == "1" ]; then
         do_clean
 else
