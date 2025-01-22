@@ -37,6 +37,11 @@ Open the container:
 ```
 ./scripts/run-container.sh
 ```
+Build linux for both the hypervisor and the VM:
+```
+./scripts/build-linux.sh -e base
+./scripts/build-linux-guest.sh -e base
+```
 
 Build the file systems of the hypervisor and the VM for a particular experiment (for example base experiment). 
 ```
@@ -44,13 +49,6 @@ Build the file systems of the hypervisor and the VM for a particular experiment 
 ./scripts/build-buildroot.sh -e base
 ```
 **Hint**: Each experiment has its own file system configuration and file overlays (files which are going to appear in the file system)
-
-
-Build linux for both the hypervisor and the VM:
-```
-./scripts/build-linux.sh -e base
-./scripts/build-linux-guest.sh -e base
-```
 
 Exit from container
 ```
