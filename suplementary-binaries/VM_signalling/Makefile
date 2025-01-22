@@ -10,11 +10,18 @@ all: $(TARGET1) $(TARGET2)
 # Build the first target
 $(TARGET1): $(SRC1)
 	$(CC) $(CFLAGS) $^ -o $@
-	cp $(TARGET) ../../overlay/VM_overlay_*/root/.
+	@for d in ../../overlay/VM_overlay_*/root; do \
+	echo "Copying $(TARGET1) to $$d/..."; \
+	cp $(TARGET1) $$d/; \
+	done
+
 # Build the second target
 $(TARGET2): $(SRC2)
 	$(CC) $(CFLAGS) $^ -o $@
-	cp $(TARGET) ../../overlay/VM_overlay_*/root/.
+	@for d in ../../overlay/VM_overlay_*/root; do \
+	echo "Copying $(TARGET2) to $$d/..."; \
+	cp $(TARGET2) $$d/; \
+	done
 # Clean up the binaries
 clean:
 	rm -f $(TARGET1) $(TARGET2)

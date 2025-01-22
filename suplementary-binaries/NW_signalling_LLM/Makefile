@@ -7,7 +7,10 @@ all: $(TARGET)
 
 $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) $^ -o $@
-	cp $(TARGET) ../../overlay/hypervisor_overlay_*/root/.
+	@for d in ../../overlay/hypervisor_overlay_*/root; do \
+	echo "Copying $(TARGET) to $$d/..."; \
+	cp $(TARGET) $$d/; \
+	done
 clean:
 	rm -f $(TARGET)
 

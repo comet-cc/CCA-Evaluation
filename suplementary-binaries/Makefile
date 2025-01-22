@@ -5,7 +5,7 @@ CC := aarch64-linux-gnu-gcc
 CFLAGS := -Wall
 
 # List of module directories
-MODULES := VM_signalling NW_signalling NW_signalling_LLM markers memory_touch benchmark_lib
+MODULES := VM_signalling NW_signalling NW_signalling_LLM markers memory_touch 
 
 # Export compiler settings
 export CC CFLAGS

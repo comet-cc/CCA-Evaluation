@@ -22,15 +22,20 @@ To set up shrinkwrap on your device:
 ```
 
 ## 2-Build binary files
-Open the container:
-
-```
-./scripts/run-container.sh
-```
 
 Build suplementary binaries to be included in the target file systems
 ```
 ./scripts/build-suplementary.sh
+```
+Build other necessary firmware including the RMM and Trusted Monitor;
+```
+./scripts/build-firmware.sh
+```
+
+Open the container:
+
+```
+./scripts/run-container.sh
 ```
 
 Build the file systems of the hypervisor and the VM for a particular experiment (for example base experiment). 
@@ -50,11 +55,6 @@ Build linux for both the hypervisor and the VM:
 Exit from container
 ```
 exit
-```
-
-Build other necessary firmware including the RMM and Trusted Monitor;
-```
-./scripts/build-firmware.sh
 ```
 
 ## 3-Run FVP
