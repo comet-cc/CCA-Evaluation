@@ -10,17 +10,11 @@ all: $(TARGET1) $(TARGET2)
 # Build the first target
 $(TARGET1): $(SRC1)
 	$(CC) $(CFLAGS) $^ -o $@
-	cp $(TARGET1) ../../VM_overlaysig/root/.
-	cp $(TARGET1) ../../VM_overlay1/root/.
-	cp $(TARGET1) ../../VM_overlay3/root/.
-
+	cp $(TARGET) ../../overlay/VM_overlay_*/root/.
 # Build the second target
 $(TARGET2): $(SRC2)
 	$(CC) $(CFLAGS) $^ -o $@
-	cp $(TARGET2) ../../VM_overlaysig/root/.
-	cp $(TARGET2) ../../VM_overlay1/root/.
-	cp $(TARGET2) ../../VM_overlay3/root/.
-
+	cp $(TARGET) ../../overlay/VM_overlay_*/root/.
 # Clean up the binaries
 clean:
 	rm -f $(TARGET1) $(TARGET2)

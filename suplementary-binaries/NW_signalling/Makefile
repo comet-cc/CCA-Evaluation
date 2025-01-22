@@ -7,9 +7,7 @@ all: $(TARGET)
 
 $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) $^ -o $@
-	cp $(TARGET) ../../hypervisor_overlaysig/root/.
-	cp $(TARGET) ../../hypervisor_overlay1/root/.
-	cp $(TARGET) ../../hypervisor_overlay3/root/.
+	cp $(TARGET) ../../overlay/hypervisor_overlay_*/root/.
 clean:
 	rm -f $(TARGET)
 

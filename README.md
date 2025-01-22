@@ -1,5 +1,6 @@
 # Build & Evaluate Arm CCA 
 
+## 1-Initilization
 To initially download the software stack and create appropriate file structure:
 
 ```
@@ -20,26 +21,30 @@ To set up shrinkwrap on your device:
 ./scripts/install-shrinkwrap.sh
 ```
 
-Then you need to open the container:
+## 2-Build binary files
+Open the container:
 
 ```
 ./scripts/run-container.sh
 ```
 
-1-Create suplementary binaries to be included in the target file systems
+Build suplementary binaries to be included in the target file systems
 ```
 ./scripts/build-suplementary.sh
 ```
 
-2-Run the following commands inside the container
+Build the file systems of the hypervisor and the VM for a particular experiment (for example base experiment). 
 ```
 ./scripts/build-buildroot2.sh -e base
 ./scripts/build-buildroot.sh -e base
 ```
+**Hint**: Each experiment has its own file system configuration and file overlays (files which are going to appear in the file system)
 
-3-Build linux for both the hypervisor and the VM:
+
+Build linux for both the hypervisor and the VM:
 ```
 ./scripts/build-linux.sh
+./scripts/build-linux-guest.sh
 ```
 
 Exit from container
@@ -47,12 +52,14 @@ Exit from container
 exit
 ```
 
-Build other necessary firmware including RMM and Trusted Monitor;
+Build other necessary firmware including the RMM and Trusted Monitor;
 ```
 ./scripts/build-firmware.sh
 ```
 
+## 3-Run FVP
 To run FVP for a particular experiment (for example base experiment):
 ```
 ./scripts/run-shrinkwrap.sh -e base
 ```
+## 4-Evalution
