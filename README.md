@@ -14,13 +14,11 @@ To create a docker container on your local device:
 ./scripts/build-container.sh
 ```
 
-Log out and log in for changes to take effect
-
 To set up shrinkwrap on your device:
 ```
 ./scripts/install-shrinkwrap.sh
 ```
-
+Log out and log in for changes to take effect
 ## 2-Build binary files
 
 Build suplementary binaries to be included in the target file systems
