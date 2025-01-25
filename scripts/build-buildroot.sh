@@ -39,8 +39,8 @@
 #
 PARALLELISM1=20
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-QEMU_PATH="${DIR}/../qemu"
-#KVMTOOL_PATH="${DIR}/../kvmtool"
+#QEMU_PATH="${DIR}/../qemu"
+KVMTOOL_PATH="${DIR}/../kvmtool"
 experiment="base"
 clean_flag="0"
 while getopts "c:e:" opt; do
