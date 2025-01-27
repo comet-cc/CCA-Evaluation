@@ -1,12 +1,18 @@
 # Build & Evaluate Arm CCA 
 
 ## 1-Initilization
+Download git and set up yout a git account on the platfrom
+```
+sudo apt install git
+git config --global user.name "<your-name>"
+git config --global user.email "<your-email@example.com>"
+```
+
 To initially download the software stack and create appropriate file structure:
 
 ```
 ./scripts/download-source.sh
 ```
-
 To create a docker container on your local device:
 
 ```
@@ -25,7 +31,7 @@ Build suplementary binaries to be included in the target file systems
 ```
 ./scripts/build-suplementary.sh
 ```
-Build other necessary firmware including the RMM and Trusted Monitor;
+Build other necessary firmware including the RMM and Trusted Monitor
 ```
 ./scripts/build-firmware.sh
 ```
