@@ -1,5 +1,8 @@
 # Build & Evaluate Arm CCA 
 
+This respository aims to provide a comprehensive, easy-to-use platform to build and simulate Arm CCA software stack. Instructions to build all necessary components as well as customizations are provided. TO emulate the hardware, we use
+([Fixed Virtual Platform](https://developer.arm.com/Tools%20and%20Software/Fixed%20Virtual%20Platforms)), a free platform provided by Arm that emulates Armv9-A architecture. Further instructions is to measure the overhead of running workloads within Arm CCA, using Arm tracing tools used in conjunction with FVP.
+ 
 ## 1-Initilization
 Download git and set up yout a git account on the platfrom
 ```
