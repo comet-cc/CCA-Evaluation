@@ -7,6 +7,9 @@ mkdir output
 mkdir output/aemfvp-a-rme
 mkdir trace
 
+sudo apt update
+sudo apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
 git clone -b cca-full/rmm-v1.0-eac5 https://git.gitlab.arm.com/linux-arm/linux-cca.git linux
 cp -r linux ./linux-guest
 git clone -b cca/rmm-v1.0-eac5 https://git.gitlab.arm.com/linux-arm/kvmtool-cca.git kvmtool
