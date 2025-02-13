@@ -1,0 +1,24 @@
+# Copyright (c) 2022, Arm Limited.
+# SPDX-License-Identifier: MIT
+
+%YAML 1.2
+---
+build:
+  rmm:
+    repo:
+      remote: https://git.trustedfirmware.org/TF-RMM/tf-rmm.git
+      #revision: tf-rmm-v0.6.0
+      revision: f83164d964fec97b98b74975bb8f7a4a67f828bf
+    toolchain: aarch64-none-elf-
+
+    params:
+      -DRMM_CONFIG: fvp_defcfg
+      -DCMAKE_BUILD_TYPE: Release
+      -DLOG_LEVEL: 40
+
+    build:
+      - cmake ${param:join_equal} -S . -B ${param:builddir}
+      - cmake --build ${param:builddir} -j ${param:jobs}
+
+    artifacts:
+      RMM: ${param:builddir}/Release/rmm.img
