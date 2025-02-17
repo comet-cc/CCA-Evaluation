@@ -39,11 +39,6 @@ Build other necessary firmware including the RMM and Trusted Monitor
 ./scripts/build-firmware.sh
 ```
 
-Open the container:
-
-```
-./scripts/run-container.sh
-```
 Build linux for both the hypervisor and the VM:
 ```
 ./scripts/build-linux.sh -e base

@@ -41,6 +41,7 @@ HOST_ARCH=$(uname -m)
 DOCKER_FILE="aemfvp-a-rme-${HOST_ARCH}"
 IMAGE_NAME="aemfvp-builder-test-main-reset"
 OVERWRITE="false"
+COMMAND=""
 
 
 function usage()
@@ -116,11 +117,12 @@ function run_image()
         --user ${USER}:${USER} \
         -t \
         -i \
-        ${IMAGE_NAME}
+        ${IMAGE_NAME} \
+	${COMMAND}
 }
 
 while [ $# -gt 0 ]; do
-    while getopts :v:f:i:ohw:V: opt; do
+    while getopts :v:f:i:ohw:V:c: opt; do
         case $opt in
             v)
                 HOST_DIR=$OPTARG
@@ -134,6 +136,9 @@ while [ $# -gt 0 ]; do
             i)
                 IMAGE_NAME=$OPTARG
                 ;;
+	    c)
+		COMMAND=$OPTARG
+		;;
             o)
                 OVERWRITE=true
                 ;;
