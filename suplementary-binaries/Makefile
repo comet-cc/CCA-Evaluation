@@ -1,7 +1,7 @@
 # Main Makefile for the project
 
 # Cross compiler settings
-CC := aarch64-linux-gnu-gcc
+CC := /opt/toolchains/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-gcc
 CFLAGS := -Wall
 
 # List of module directories

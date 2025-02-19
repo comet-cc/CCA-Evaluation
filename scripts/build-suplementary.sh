@@ -1,7 +1,6 @@
 #!/bin/bash
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cd $DIR/../suplementary-binaries
-make clean
-make
+
+$DIR/container/container.sh run  -V ${DIR}/../. -c "./scripts/build-suplementary-script.sh"
 

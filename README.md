@@ -23,7 +23,7 @@ To create a docker container on your local device:
 ./scripts/build-container.sh
 ```
 
-To set up shrinkwrap on your device:
+To set up [Shrinkwrap](https://shrinkwrap.docs.arm.com/en/latest/overview.html) on your device:
 ```
 ./scripts/install-shrinkwrap.sh
 ```
@@ -71,4 +71,19 @@ a realm VM:
 ```
 
 ## 4-Evalution
+In order to evaluate CCA, we extensively describe a method to measure number of instrcution executed by the FVP's core 
+between two points marked in the code. Our method is inspired by the tracing method used in [Acai](https://github.com/sectrs-acai).
 
+a) First you need to download a free software called [Fast Model](https://developer.arm.com/Tools%20and%20Software/Fast%20Models). You also need to create an accoount of Arm website. 
+You need to copy two dynamic libraries `GenericTrace.so` and `ToggleMTIPlugin.so` from to `./Arm-tools`.
+
+b) You need to build a new Shrinkwrap instance with enabled tracing features of FVP:
+
+```
+./scripts/build-firmware.sh -s trace
+``` 
+
+c) Now you can run the new instance with flag `-s trace`:
+```
+./scripts/run-shrinkwrap.sh -e base -s trace
+```

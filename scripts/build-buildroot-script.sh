@@ -62,7 +62,6 @@ do_build ()
 	# Set Compiler
 	export CROSS_COMPILE=$BUILDROOT_CROSS_COMPILE
 	export PATH=$BUILDROOT_GCC_PATH:$PATH
-
 	# Enable build of KvmTool & set up the path
 	cp ${BUILDROOT_CONFIG_FILE} .config
 	echo "KVMTOOL_OVERRIDE_SRCDIR = ${KVMTOOL_PATH}" > local.mk

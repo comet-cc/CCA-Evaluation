@@ -3,12 +3,12 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 SETTING="without-trace"
-while getopts "e:" opt; do
+while getopts "e:s:" opt; do
         case $opt in
         e)
                 experiment=$OPTARG
                 ;;
-	 s)
+	s)
                 SETTING=$OPTARG
                 ;;
         esac
@@ -22,14 +22,18 @@ fi
 SHRINKWRAP_LOC="$DIR/../shrinkwrap/shrinkwrap/shrinkwrap"
 set -x
 
+if [ $SETTING == "without-trace" ]; then
+	$SHRINKWRAP_LOC run cca-3world-customized-$SETTING.yaml \
+	--rtvar=KERNEL=$DIR/../output/Image-$experiment \
+	--rtvar=ROOTFS=$DIR/../output/host-fs-$experiment.ext4
 
-$SHRINKWRAP_LOC run cca-3world-customized-$SETTING.yaml \
---rtvar=KERNEL=$DIR/../output/Image-$experiment \
---rtvar=ROOTFS=$DIR/../output/host-fs-$experiment.ext4
-
-
-#--rtvar=GenericPATH=$DIR/../plugins/GenericTrace.so \
-#--rtvar=TogglePATH=$DIR/../plugins/ToggleMTIPlugin.so \
-#--rtvar=TRACEDIR=$DIR/../trace-files
+elif [ $SETTING == "trace" ]; then
+	$SHRINKWRAP_LOC run cca-3world-customized-$SETTING.yaml \
+	--rtvar=KERNEL=$DIR/../output/Image-$experiment \
+	--rtvar=ROOTFS=$DIR/../output/host-fs-$experiment.ext4 \
+	--rtvar=GenericPATH=$DIR/../Arm-tools/GenericTrace.so \
+	--rtvar=TogglePATH=$DIR/../Arm-tools/ToggleMTIPlugin.so \
+	--rtvar=TRACEDIR=$DIR/../trace-files
+fi
 
 

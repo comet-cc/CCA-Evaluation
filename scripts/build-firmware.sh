@@ -10,12 +10,10 @@ while getopts "c:s:" opt; do
                 clean_flag="1"
                 ;;
         s)
-                $SETTING=$OPTARG
+                SETTING=$OPTARG
                 ;;
         esac
 done
 set -x
 SHRINKWRAP_LOC="$DIR/../shrinkwrap/shrinkwrap/shrinkwrap"
-#export PATH="$DIR/../shrinkwrap/shrinkwrap:$PATH"
-#shrinkwrap build cca-3world-customized.yaml --no-sync-all
-$SHRINKWRAP_LOC build cca-3world-customized-${SETTING}.yaml 
+$SHRINKWRAP_LOC build cca-3world-customized-${SETTING}.yaml

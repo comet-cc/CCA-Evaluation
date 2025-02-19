@@ -5,7 +5,8 @@ cd $DIR/..
 
 mkdir output
 mkdir output/aemfvp-a-rme
-mkdir trace
+mkdir trace-files
+mkdir Arm-tools
 
 sudo apt update
 sudo apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
