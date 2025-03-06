@@ -3,7 +3,7 @@
 This respository aims to provide a comprehensive, easy-to-use platform to build and simulate Arm CCA software stack. Instructions to build all necessary components as well as customizations are provided. To emulate the hardware, we use
 ([Fixed Virtual Platform](https://developer.arm.com/Tools%20and%20Software/Fixed%20Virtual%20Platforms)), a free platform provided by Arm that emulates Armv9-A architecture. Further guide is provided to measure the overhead of running workloads within Arm CCA. We use Arm tracing tools in conjuction with FVP to measure number of instructions executed by FVP's core during execution of the target workload.
  
-## 1-Initilization
+## 1 Initilization
 Download git and set up yout a git account on the platfrom
 ```
 sudo apt install git
@@ -28,7 +28,7 @@ To set up [Shrinkwrap](https://shrinkwrap.docs.arm.com/en/latest/overview.html) 
 ./scripts/install-shrinkwrap.sh
 ```
 Log out and log in for changes to take effect
-## 2-Build binary files
+## 2 Build binary files
 
 Build suplementary binaries to be included in the target file systems
 ```
@@ -57,7 +57,7 @@ Exit from container
 exit
 ```
 
-## 3-Boot FVP and create a VM
+## 3 Boot FVP and create a VM
 To run FVP for a particular experiment (for example base experiment):
 ```
 ./scripts/run-shrinkwrap.sh -e base
@@ -70,7 +70,7 @@ a realm VM:
 /root/create_realm_VM_100.sh
 ```
 
-## 4-Evalution
+## 4 Evalution
 In order to evaluate CCA, we introduce a method to measure number of instrcution executed by the FVP's core between two points in the code. This methods requires three
 steps. a) Enabling tracing in FVP, b) Add markers to the code running in FVP (e.g. inference code), these markers guide the tracing platform to capture some information about the FVP at the time of running the marker, and c) Analizing the final tracing file using the python code we provide. Note that our method is adapted from the tracing method used in [Acai](https://github.com/sectrs-acai).
 
@@ -90,7 +90,7 @@ Now you can run the new instance with flag `-s trace`:
 ./scripts/run-shrinkwrap.sh -e base -s trace
 ```
 ### b) Adding markers to a code/script
-Briefly speaking, every marker is an special assembly code executed by the FVP core. The tracing platform writes the executed code along with other metadata information (e.g., total number of instruction executed by the core until that point) in the final trace file.
+Briefly speaking, every marker is a special assembly code executed by the FVP core. The tracing platform writes these executed code along with other metadata information (e.g., total number of instruction executed by the core until that point) in the final trace file.
 In order to underestand how to define new markers please look at the markers defined at `./suplementary-binaries/markers/markers.c` and also take a look at `./overlay/hypervisor_overlay_base/root/create_realm_VM_100.sh` to see how we use these markers.
 
 
