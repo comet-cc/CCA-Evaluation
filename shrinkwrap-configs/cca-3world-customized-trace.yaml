@@ -10,8 +10,6 @@ layers:
 #  - kvm-unit-tests.yaml
 
 build:
-  rmm:
-     sourcedir: /home/netsys1/reset-project/rme-stack/rmm
   linux:
     build:
       - echo sdsd >> ${param:builddir}/sdsd.txt
