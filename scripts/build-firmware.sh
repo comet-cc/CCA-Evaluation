@@ -14,6 +14,10 @@ while getopts "c:s:" opt; do
                 ;;
         esac
 done
-set -x
 SHRINKWRAP_LOC="$DIR/../shrinkwrap/shrinkwrap/shrinkwrap"
-$SHRINKWRAP_LOC build cca-3world-customized-${SETTING}.yaml
+
+if [ $SETTING == "trustzone" ]; then
+	$SHRINKWRAP_LOC build cca-4world-customized.yaml
+else
+	$SHRINKWRAP_LOC build cca-3world-customized-${SETTING}.yaml
+fi

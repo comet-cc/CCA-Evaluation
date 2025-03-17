@@ -1,0 +1,59 @@
+# Copyright (c) 2022, Arm Limited.
+# SPDX-License-Identifier: MIT
+
+%YAML 1.2
+---
+description: >-
+  Builds on cca-3world.yaml, and adds support for running Hafnium along with some
+  secure partitions in Secure World.
+  Build with:
+
+  .. code-block:: shell
+    $ shrinkwrap build cca-4world.yaml --overlay buildroot.yaml --btvar GUEST_ROOTFS='${artifact:BUILDROOT}'
+
+  Then run the model with:
+
+  .. code-block:: shell
+    $ cd ~/.shrinkwrap/package/cca-4world
+    $ shrinkwrap run cca-4world.yaml --rtvar ROOTFS=rootfs.ext2 --rtvar SHARE=.
+
+  Once the host has booted, log in as "root" (no password).
+
+  Secure partitions can be enumerated by:
+
+  .. code-block:: shell
+    # cat /sys/devices/arm-ffa-*/uuid
+    b4b5671e-4a90-4fe1-b81f-fb13dae1dacb
+    d1582309-f023-47b9-827c-4464f5578fc8
+    79b55c73-1d8c-44b9-8593-61e1770ad8d2
+    eaba83d8-baaf-4eaf-8144-f7fdcbe544a7
+
+  See cca-3worlds.yaml config :ref:`userguide/configstore/cca-3world:description`
+  if willing to launch a realm using kvmtool.
+
+image: shrinkwraptool/base-full
+
+concrete: true
+
+layers:
+  - cca-3world.yaml
+  - hafnium-base.yaml
+  # Provides secure partitions that run under Hafnium for demonstration.
+  - tftf-base.yaml
+
+build:
+  tfa:
+    params:
+      SPD: spmd
+      SPMD_SPM_AT_SEL2: 1
+      SP_LAYOUT_FILE: ${artifact:SP_LAYOUT}
+      BL32: ${artifact:HAFNIUM}
+
+  linux:
+    prebuild:
+      - ./scripts/config --file ${param:builddir}/.config --enable CONFIG_ARM_FFA_TRANSPORT
+
+run:
+  terminals:
+    bp.terminal_2:
+      friendly: hafnium

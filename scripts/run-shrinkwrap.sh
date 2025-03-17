@@ -34,6 +34,11 @@ elif [ $SETTING == "trace" ]; then
 	--rtvar=GenericPATH=$DIR/../Arm-tools/GenericTrace.so \
 	--rtvar=TogglePATH=$DIR/../Arm-tools/ToggleMTIPlugin.so \
 	--rtvar=TRACEDIR=$DIR/../trace-files
+
+elif [ $SETTING == "trustzone" ]; then
+        $SHRINKWRAP_LOC run cca-4world-customized.yaml \
+        --rtvar=KERNEL=$DIR/../output/Image-$experiment \
+        --rtvar=ROOTFS=$DIR/../output/host-fs-$experiment.ext4
 fi
 
 

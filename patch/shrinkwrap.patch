@@ -1,0 +1,37 @@
+diff --git a/config/rmm-base.yaml b/config/rmm-base.yaml
+index a839231..594f6be 100644
+--- a/config/rmm-base.yaml
++++ b/config/rmm-base.yaml
+@@ -7,8 +7,8 @@ build:
+   rmm:
+     repo:
+       remote: https://git.trustedfirmware.org/TF-RMM/tf-rmm.git
+-      revision: tf-rmm-v0.6.0
+-
++      #revision: tf-rmm-v0.6.0
++      revision: f83164d964fec97b98b74975bb8f7a4a67f828bf
+     toolchain: aarch64-none-elf-
+ 
+     params:
+diff --git a/shrinkwrap/utils/workspace.py b/shrinkwrap/utils/workspace.py
+index bde46bc..487ca4c 100644
+--- a/shrinkwrap/utils/workspace.py
++++ b/shrinkwrap/utils/workspace.py
+@@ -4,8 +4,8 @@
+ import os
+ 
+ _code_root = os.path.dirname(os.path.dirname(__file__))
+-_data_root = os.path.expanduser('~/.shrinkwrap')
+-
++#_data_root = os.path.expanduser('~/.shrinkwrap')
++_data_root = os.path.abspath(os.path.join(_code_root, '../../.shrinkwrap'))
+ def _get_loc(var, default):
+ 	path = os.environ.get(var, default)
+ 	path = os.path.abspath(path)
+@@ -50,4 +50,4 @@ def dump():
+ 	print(f'  {package}')
+ 	print(f'workspace.config:')
+ 	for path in configs():
+-		print(f'  {path}')
+\ No newline at end of file
++		print(f'  {path}')
