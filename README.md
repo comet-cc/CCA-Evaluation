@@ -52,11 +52,6 @@ Build the file systems of the hypervisor and the VM for a particular experiment 
 ```
 **Hint**: Each experiment has its own file system configuration and file overlays (files which are going to appear in the file system)
 
-Exit from container
-```
-exit
-```
-
 ## 3 Boot FVP and create a VM
 To run FVP for a particular experiment (for example base experiment):
 ```
@@ -95,7 +90,7 @@ In order to underestand how to define new markers please look at the markers def
 
 
 ### c) Analizing final trace file
-IF tracing is enabled, after terminating the FVP, a `trace_{time}.txt` is saved at `./trace-files`. You can analize the final trace file by:
+If tracing is enabled, after terminating the FVP, a `trace_{time}.txt` is saved at `./trace-files`. You can analize the final trace file by:
 ```
 python3 ./tracing-scripts/count_pattern.py 0 ./trace-files/trace_{time}.txt
 ```
