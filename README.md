@@ -94,3 +94,25 @@ If tracing is enabled, after terminating the FVP, a `trace_{time}.txt` is saved 
 ```
 python3 ./tracing-scripts/count_pattern.py 0 ./trace-files/trace_{time}.txt
 ```
+
+## Paper
+**Name**
+Sina Abdollahi, Mohammad Maheri, Sandra Siby, Marios Kogias, Hamed Haddadi
+
+
+**Abstract** 
+
+The paper can be found [be updated]().
+
+## Citation
+
+If you use the code/data in your research, please cite our work as follows:
+
+```
+@inproceedings{,
+}
+```
+
+## Contact
+
+In case of questions, please get in touch with [Sina Abdollahi](https://www.imperial.ac.uk/people/s.abdollahi22).
