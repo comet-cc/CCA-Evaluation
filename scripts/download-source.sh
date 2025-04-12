@@ -4,7 +4,6 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $DIR/..
 
 mkdir output
-mkdir output/aemfvp-a-rme
 mkdir trace-files
 mkdir Arm-tools
 

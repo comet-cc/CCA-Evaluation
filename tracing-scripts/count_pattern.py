@@ -221,31 +221,12 @@ if __name__ == "__main__":
 	("MOV      xzr,#0x111", "REC_RUN1_computation"),
 	("MOV      xzr,#0x112", "REC_RUN2_computation")
     ]
-    experiment_patterns = [
+    experiment_detection_patterns = [
     ("MOV      xzr,#0x280", "Realm VM"),
     ("MOV      xzr,#0x281", "NW VM"),
     ("MOV      xzr,#0x282", "NW"),
     ("MOV      xzr,#0x283", "Realm VM QEMU"),
     ("MOV      xzr,#0x284", "NW VM QEMU")
-    ]
-    patterns11111 = [
-        ("MOV      xzr,#0x100", "Start_End_Marker"),
-        ("MOV      xzr,#0x200", "Initialisation"),
-        ("MOV      xzr,#0x180", "READ_INPUT_ADDR"),
-        ("MOV      xzr,#0x210", "Read_Input "),
-        ("MOV      xzr,#0x220", "Inference"),
-        ("MOV      xzr,#0x230", "Write_Output"), 
-        ("MOV      xzr,#0x240", "Update_State"), 
-        ("MOV      xzr,#0x250", "VM_Creation"), 
-	("MOV      xzr,#0x251", "Realm_Creation_After_Activation"),
-	("MOV      xzr,#0x252", "Realm_Creation_Before_Activation"),
-        ("MOV      xzr,#0x260", "VM_Destruction"), 
-        ("MOV      xzr,#0x271", "Memory_Delegation100"), 
-        ("MOV      xzr,#0x272", "Memory_Delegation200"),
-        ("MOV      xzr,#0x273", "Memory_Delegation300"),
-        ("MOV      xzr,#0x274", "Memory_Delegation400"),
-        ("MOV      xzr,#0x275", "Memory_Delegation500"), 
-        ("MOV      xzr,#0x280", "Custom")
     ]
     patterns = [
         ("MOV      xzr,#0x100", "Start End Marker"),
@@ -253,16 +234,13 @@ if __name__ == "__main__":
         ("MOV      xzr,#0x180", "Read Input Addr"),
         ("MOV      xzr,#0x210", "Read Input"),
         ("MOV      xzr,#0x220", "Inference"),
-        ("MOV      xzr,#0x230", "Write Output"), 
-        ("MOV      xzr,#0x240", "Update State"), 
+        ("MOV      xzr,#0x230", "Write Output"),
+        ("MOV      xzr,#0x240", "Update State"),
         ("MOV      xzr,#0x250", "Realm Creation"),
 	("MOV      xzr,#0x251", "Realm Creation:After Activation"),
 	("MOV      xzr,#0x252", "Realm Creation:Before Activation"),
         ("MOV      xzr,#0x260", "Realm Destruction"),
     ]
 
-    patterns22 = [
-        ("MOV      xzr,#0x220", "Inference")
-    ]
-    split_and_process(content, patterns, sum_patterns, experiment_patterns)
-    plot_results(patterns, experiment_patterns, output_file)
+    split_and_process(content, patterns, sum_patterns, experiment_detection_patterns)
+    plot_results(patterns, experiment_detection_patterns, output_file)
