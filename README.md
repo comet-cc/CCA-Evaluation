@@ -47,8 +47,8 @@ Build linux for both the hypervisor and the VM:
 
 Build the file systems of the hypervisor and the VM for a particular experiment (for example base experiment). 
 ```
-./scripts/build-buildroot2.sh -e base -c 1
-./scripts/build-buildroot.sh -e base -c 1
+./scripts/build-buildroot-guest.sh -e base -c 1
+./scripts/build-buildroot-host.sh -e base -c 1
 ```
 **Hint**: Each experiment has its own file system packages (reflected in `.\overlay\VM_buildroot_config_{experiment}`) and file overlays (reflected in `.\overlay\VM_overlay_{experiment}`).
 
@@ -75,7 +75,7 @@ steps. a) Enabling tracing in FVP, b) Add markers to the code running in FVP (e.
 
 ### a) Setup tracing with FVP
 First you need to download [Fast Model](https://developer.arm.com/Tools%20and%20Software/Fast%20Models). You just need to create an accoount of Arm website, but the software is free of charge. 
-After downloding, install the software by running `setup.sh` (for this step you need to have a screen access to your system). Then, you should find two dynamic libraries `GenericTrace.so` and `ToggleMTIPlugin.so` and copy them to `./Arm-tools`. 
+After downloding, install the software by running `setup.sh` (for this step you may need to have a graphical terminal access to your system). Then, you should find two dynamic libraries `GenericTrace.so` and `ToggleMTIPlugin.so` at `FastModelsPortfolio_{version}/plugins/Linux64_GCC-{version}/`, copy them to `./Arm-tools` folder in the root of the repository. 
 
 Next, you need to build a new Shrinkwrap instance with enabled tracing features of FVP:
 
@@ -83,7 +83,7 @@ Next, you need to build a new Shrinkwrap instance with enabled tracing features 
 ./scripts/build-firmware.sh -s trace
 ``` 
 
-Now you can run the new instance with flag `-s trace`:
+Now you can run the new instance with flag `-s trace` and the desired experiment:
 
 ```
 ./scripts/run-shrinkwrap.sh -e base -s trace

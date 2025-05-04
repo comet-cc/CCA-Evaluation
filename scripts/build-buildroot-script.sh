@@ -106,7 +106,7 @@ BUILDROOT_CONFIG_FILE="${DIR}/../overlay/hypervisor_buildroot_config_${experimen
 OUTPUT_PLATFORM_DIR="${DIR}/../output"
 ROOTFS_OVERLAY="${DIR}/../overlay/hypervisor_overlay_${experiment}"
 POST_BUILD_SCRIPT="${DIR}/../overlay/post_build_script.sh"
-BUILDROOT_PATH="${DIR}/../buildroot_${experiment}"
+BUILDROOT_PATH="${DIR}/../buildroot_host"
 
 if [ "$clean_flag" == "1" ]; then
 	do_clean
