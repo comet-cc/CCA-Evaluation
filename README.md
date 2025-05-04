@@ -41,8 +41,8 @@ Build other necessary firmware including the RMM and Trusted Monitor.
 
 Build linux for both the hypervisor and the VM:
 ```
-./scripts/build-linux.sh -e base -c 1
-./scripts/build-linux-guest.sh -e base -c 1
+./scripts/build-linux.sh -c 1
+./scripts/build-linux-guest.sh -c 1
 ```
 
 Build the file systems of the hypervisor and the VM for a particular experiment (for example base experiment). 

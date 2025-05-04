@@ -59,15 +59,11 @@
 # OUTPUT_DIR - Directory where build products are stored
 #
 PARALLELISM1=20
-experiment="base"
 clean_flag="0"
 while getopts "c:e:" opt; do
         case $opt in
         c)
                 clean_flag=$OPTARG
-                ;;
-        e)
-                experiment=$OPTARG
                 ;;
         esac
 done
@@ -238,7 +234,7 @@ do_package ()
 	fi
 
 	if [ "$LINUX_RME_BUILD_ENABLED" == "1" ]; then
-		cp ${LINUX_PATH}/arch/arm64/boot/Image $OUTPUT_PLATFORM_DIR/Image-$experiment
+		cp ${LINUX_PATH}/arch/arm64/boot/Image $OUTPUT_PLATFORM_DIR/Image
 	fi
 }
 

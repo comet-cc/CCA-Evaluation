@@ -59,15 +59,11 @@
 # OUTPUT_DIR - Directory where build products are stored
 #
 PARALLELISM1=20
-experiment="base"
 clean_flag="0"
 while getopts "c:e:" opt; do
         case $opt in
         c)
                 clean_flag=$OPTARG
-                ;;
-        e)
-                experiment=$OPTARG
                 ;;
         esac
 done
@@ -240,13 +236,15 @@ do_package ()
 	fi
 
 	if [ "$LINUX_RME_BUILD_ENABLED" == "1" ]; then
-		cp -v ${LINUX_PATH}/arch/arm64/boot/Image $OUTPUT_PLATFORM_DIR/Image-100
+		for dest in "$DIR"/../overlay/*/hypervisor_overlay_*/root/VM_image; do
+			echo "Copying Image to $dest"
+			cp -v "${LINUX_PATH}/arch/arm64/boot/Image" "$dest/Image-100"
+    		done
 	fi
 }
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $DIR/aemfvp-a-rme
-OUTPUT_PLATFORM_DIR="${DIR}/../overlay/${experiment}/hypervisor_overlay_${experiment}/root/VM_image"
 LINUX_PATH="$DIR/../linux-guest"
 
 if [ "$clean_flag" == "1" ]; then
