@@ -1,0 +1,43 @@
+From 08328c119f83521afef98484f9b0b582ccba35a6 Mon Sep 17 00:00:00 2001
+From: SinaAb7 <sinaabdollahip@gmail.com>
+Date: Sun, 4 May 2025 10:03:13 +0100
+Subject: [PATCH] Add scripts to enble marking of realm creation time after
+ activation point
+
+---
+ arm/aarch64/realm.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arm/aarch64/realm.c b/arm/aarch64/realm.c
+index e70ee55..eeeed3f 100644
+--- a/arm/aarch64/realm.c
++++ b/arm/aarch64/realm.c
+@@ -2,7 +2,13 @@
+ #include "kvm/kvm-cpu.h"
+ 
+ #include "asm/realm.h"
++#define STR(s) #s
++#define CCA_MARKER(marker) __asm__ volatile("MOV XZR, " STR(marker))
++#define CCA_TRACE_START __asm__ volatile("HLT 0x1337");
++#define CCA_TRACE_STOP __asm__ volatile("HLT 0x1337");
+ 
++#define CCA_MARKER_CREATION_AFTER_ACTIVATION_START() CCA_MARKER(0x2510);
++#define CCA_MARKER_CREATION_BEFORE_ACTIVATION_END() CCA_MARKER(0x2521);
+ 
+ static void realm_configure_hash_algo(struct kvm *kvm)
+ {
+@@ -218,6 +224,11 @@ static void kvm_arm_realm_activate_realm(struct kvm *kvm)
+ 	if (ioctl(kvm->vm_fd, KVM_ENABLE_CAP, &activate_realm) < 0)
+ 		die_perror("KVM_CAP_ARM_RME(KVM_CAP_ARM_RME_ACTIVATE_REALM)");
+ 
++        CCA_TRACE_START;
++        CCA_MARKER_CREATION_BEFORE_ACTIVATION_END();
++        CCA_MARKER_CREATION_AFTER_ACTIVATION_START();
++        CCA_TRACE_STOP;
++
+ 	kvm->arch.realm_is_active = true;
+ }
+ 
+-- 
+2.34.1
+

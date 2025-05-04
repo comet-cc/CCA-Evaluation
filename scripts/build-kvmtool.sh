@@ -17,10 +17,9 @@ if [ -z "${EXPERIMENT}" ]; then
 	exit 1
 fi
 
-cd "$( dirname "${BASH_SOURCE[0]}" )"/../buildroot_${EXPERIMENT}
+cd "$( dirname "${BASH_SOURCE[0]}" )"/../buildroot_host
 make kvmtool-dirclean
 make kvmtool-rebuild
 cd ../scripts
-./build-buildroot2.sh -e ${EXPERIMENT}
-./build-buildroot.sh -e ${EXPERIMENT}
+./build-buildroot-host.sh -e ${EXPERIMENT}
 

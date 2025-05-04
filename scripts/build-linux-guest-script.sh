@@ -246,7 +246,7 @@ do_package ()
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $DIR/aemfvp-a-rme
-OUTPUT_PLATFORM_DIR="${DIR}/../overlay/hypervisor_overlay_${experiment}/root/VM_image"
+OUTPUT_PLATFORM_DIR="${DIR}/../overlay/${experiment}/hypervisor_overlay_${experiment}/root/VM_image"
 LINUX_PATH="$DIR/../linux-guest"
 
 if [ "$clean_flag" == "1" ]; then

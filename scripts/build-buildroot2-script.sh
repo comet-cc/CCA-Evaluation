@@ -93,12 +93,11 @@ do_package ()
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $DIR/aemfvp-a-rme
-BUILDROOT_CONFIG_FILE="${DIR}/../overlay/VM_buildroot_config_${experiment}"
-ROOTFS_OVERLAY="${DIR}/../overlay/VM_overlay_${experiment}"
-POST_BUILD_SCRIPT="${DIR}/../overlay/post_build_script2.sh"
-OUTPUT_PLATFORM_DIR="${DIR}/../overlay/hypervisor_overlay_${experiment}/root/VM_image"
+BUILDROOT_CONFIG_FILE="${DIR}/../overlay/${experiment}/VM_buildroot_config_${experiment}"
+ROOTFS_OVERLAY="${DIR}/../overlay/${experiment}/VM_overlay_${experiment}"
+POST_BUILD_SCRIPT="${DIR}/../overlay/${experiment}/post_build_script2.sh"
+OUTPUT_PLATFORM_DIR="${DIR}/../overlay/${experiment}/hypervisor_overlay_${experiment}/root/VM_image"
 BUILDROOT_PATH="${DIR}/../buildroot_guest"
-SHARED="${DIR}/../overlay/shared_files"
 
 if [ "$clean_flag" == "1" ]; then
         do_clean

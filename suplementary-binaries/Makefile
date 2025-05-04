@@ -5,7 +5,7 @@ CC := /opt/toolchains/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu/
 CFLAGS := -Wall
 
 # List of module directories
-MODULES := VM_signalling NW_signalling NW_signalling_LLM markers memory_touch 
+MODULES := VM_signalling NW_signalling NW_signalling_LLM markers memory_touch benchmark_lib
 
 # Export compiler settings
 export CC CFLAGS

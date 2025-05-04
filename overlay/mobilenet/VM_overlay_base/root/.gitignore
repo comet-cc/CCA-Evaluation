@@ -1,0 +1,6 @@
+shared_with_VM/*
+!shared_with_VM/README.md
+marker
+memory_touch
+update_state
+check_state_get_addr

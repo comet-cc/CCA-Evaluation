@@ -1,1 +1,10 @@
-*.ko
+buildroot_host/
+buildroot_guest/
+Arm-tools/
+trace-files/
+output/
+.shrinkwrap/
+shrinkwrap/
+linux/
+linux-guest/
+kvmtool/
