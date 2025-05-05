@@ -1,7 +1,7 @@
 # Build & Evaluate Arm CCA 
 
 This respository aims to provide a comprehensive, easy-to-use platform to build and simulate Arm CCA software stack. Instructions to build all necessary components as well as customizations are provided. To emulate the CCA-supported hardware, we use
-([Fixed Virtual Platform](https://developer.arm.com/Tools%20and%20Software/Fixed%20Virtual%20Platforms)), a free platform provided by Arm. Further guide is provided to measure the overhead of running workloads within Arm CCA. We use  [Shrinkwrap](https://shrinkwrap.docs.arm.com/en/latest/overview.html) to build boot firmware of FVP and also Arm tracing tools to measure number of instructions executed by FVP's core during execution of target workloads.
+([Fixed Virtual Platform](https://developer.arm.com/Tools%20and%20Software/Fixed%20Virtual%20Platforms)), a free platform provided by Arm. Further guide is provided to measure the overhead of running workloads within Arm CCA. We use  [Shrinkwrap](https://shrinkwrap.docs.arm.com/en/latest/overview.html) to build boot firmware of FVP and also Arm tracing tools to measure number of instructions executed by FVP's core during execution of target workloads. This instructions only works on a x86 host with a Linux-based distribution (like Ubuntu).
  
 ## 1 Initilization
 Download git and set up yout a git account on the platfrom
@@ -74,7 +74,7 @@ In order to evaluate CCA, we introduce a method to measure number of instrcution
 steps. a) Enabling tracing in FVP, b) Add markers to the code running in FVP (e.g. inference code), these markers guide the tracing platform to capture some information about the FVP at the time of running the marker, and c) Analizing the final tracing file using the python code we provide. Note that our method is adapted from the tracing method used in [Acai](https://github.com/sectrs-acai).
 
 ### a) Setup tracing with FVP
-First you need to download [Fast Model](https://developer.arm.com/Tools%20and%20Software/Fast%20Models). You just need to create an accoount of Arm website, but the software is free of charge. 
+First you need to download [Fast Models 11.28 for Linux x86](https://developer.arm.com/Tools%20and%20Software/Fast%20Models). You just need to create an accoount of Arm website, but the software is free of charge. 
 After downloding, install the software by running `setup.sh` (for this step you may need to have a graphical terminal access to your system). Then, you should find two dynamic libraries `GenericTrace.so` and `ToggleMTIPlugin.so` at `FastModelsPortfolio_{version}/plugins/Linux64_GCC-{version}/`, copy them to `./Arm-tools` folder in the root of the repository. 
 
 Next, you need to build a new Shrinkwrap instance with enabled tracing features of FVP:

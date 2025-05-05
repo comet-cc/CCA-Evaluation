@@ -9,5 +9,5 @@ git clone https://git.gitlab.arm.com/tooling/shrinkwrap.git
 
 cp ./shrinkwrap-configs/* ./shrinkwrap/config/.
 cd shrinkwrap
-git checkout 31f3ecfb75e83e44e150f65f89049358ce819f0c
+git checkout -f 31f3ecfb75e83e44e150f65f89049358ce819f0c
 git apply ../patch/shrinkwrap.patch

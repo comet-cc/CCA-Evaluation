@@ -4,3 +4,4 @@ marker
 memory_touch
 update_state
 check_state_get_addr
+mobilenet_v1_1.0_224.tflite

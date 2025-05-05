@@ -115,6 +115,7 @@ do_build ()
 
 	if [ "$LINUX_RME_BUILD_ENABLED" == "1" ]; then
 		pushd $LINUX_PATH
+
 		# Apply kconf patch which support cmd line extend to disable cpuidle.
 
 		# Set Compiler

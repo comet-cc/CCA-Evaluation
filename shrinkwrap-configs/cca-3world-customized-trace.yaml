@@ -5,9 +5,6 @@ concrete: true
 
 layers:
   - cca-edk2.yaml
-#  - linux-base.yaml
-#  - kvmtool-base.yaml
-#  - kvm-unit-tests.yaml
 
 build:
   linux:

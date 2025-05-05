@@ -8,3 +8,5 @@ shrinkwrap/
 linux/
 linux-guest/
 kvmtool/
+tmp/
+FVP/
