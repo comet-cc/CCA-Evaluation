@@ -82,7 +82,7 @@ Or, to run a normal VM:
 ---
 ## 4 Evalution
 In order to evaluate CCA, we introduce a method to measure number of instrcution executed by the FVP's core between two points in the code. This methods requires three
-steps. a) Enabling tracing in FVP, b) Add markers to the code running in FVP (e.g. inference code), these markers guide the tracing platform to capture some information about the FVP at the time of running the marker, and c) Analizing the final tracing file using the python code we provide. Note that our method is adapted from the tracing method used in [Acai](https://github.com/sectrs-acai).
+steps. a) Enabling tracing in FVP, b) Add markers to the code running in FVP (e.g. inference code), these markers guide the tracing platform to capture some information about FVP at the time of running the marker, and c) Analizing the final tracing file using the python code we provide. Note that our method is adapted from the tracing method used in [Acai](https://github.com/sectrs-acai).
 
 ### a) Setup tracing with FVP
 First you need to download [Fast Models 11.27 for Linux x86](https://developer.arm.com/Tools%20and%20Software/Fast%20Models). You just need to create an accoount of Arm website, but the software is free of charge. 
@@ -92,19 +92,26 @@ Next, you need to build a new Shrinkwrap instance with enabled tracing features 
 
 ```
 ./scripts/build-firmware.sh -s trace
-``` 
+```
+ 
+Build the appropriate file systems for the desired experiment:
+```
+./scripts/download-model.sh -e mobilenet
+./scripts/build-buildroot-guest.sh -e mobilenet -c 1
+./scripts/build-buildroot-host.sh -e mobilenet -c 1
+```
 
-Now you can run the new instance with flag `-s trace` and the desired experiment. 
+Now you can run the new instance with flag `-s trace` and the desired experiment as follows. 
 
 ```
-./scripts/run-shrinkwrap.sh -e mobilenet -s mobilenet
+./scripts/run-shrinkwrap.sh -s trace -e mobilenet
 ```
 ### b) Adding markers to a code/script
-Briefly speaking, every marker is a special assembly code executed by the FVP core. The tracing platform writes these executed code along with other metadata information (e.g., total number of instruction executed by the core until that point) in the final trace file.
-In order to underestand how to define new markers please look at the markers defined at `./suplementary-binaries/markers/markers.c` and also take a look at `./overlay/hypervisor_overlay_base/root/create_realm_VM_100.sh` to see how we use these markers.
+Briefly speaking, every marker is a special assembly code executed by the FVP's core. The tracing platform writes these executed code along with other metadata information (e.g., total number of instruction executed by the core until that point) in the final trace file.
+In order to underestand how to define new markers please look at the markers defined at `./suplementary-binaries/markers/markers.c` and also take a look at `./overlay/mobilenet/hypervisor_overlay_mobilenet/root/create_realm_VM_100.sh` to see how we use these markers.
 
 ### c) Analizing final trace file
-If tracing is enabled, after terminating the FVP, a `trace_{time}.txt` is saved at `./trace-files`. You can analize the final trace file by:
+If tracing is enabled, after terminating FVP, a `trace_{time}.txt` is saved at `./trace-files`. You can analize the final trace file by:
 ```
 python3 ./tracing-scripts/count_pattern.py 0 ./trace-files/trace_{time}.txt
 ```
