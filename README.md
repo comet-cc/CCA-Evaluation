@@ -1,10 +1,12 @@
 # Build & Evaluate Arm CCA 
 
-This respository aims to provide a comprehensive, easy-to-use platform to build and simulate Arm CCA software stack. Instructions to build all necessary components as well as customizations are provided. To emulate the CCA-supported hardware, we use
-([Fixed Virtual Platform](https://developer.arm.com/Tools%20and%20Software/Fixed%20Virtual%20Platforms)), a free platform provided by Arm. Further guide is provided to measure the overhead of running workloads within Arm CCA. We use  [Shrinkwrap](https://shrinkwrap.docs.arm.com/en/latest/overview.html) to build boot firmware of FVP and also Arm tracing tools to measure number of instructions executed by FVP's core during execution of target workloads. This instructions only works on a x86 host with a Linux-based distribution (like Ubuntu).
+This repository aims to provide a comprehensive, user-friendly platform for building and simulating Arm Confidential Compute Architecture (CCA) software stack. Instructions for building all necessary components, along with customization options, are provided. To emulate the CCA-supported hardware, we use
+([Fixed Virtual Platform](https://developer.arm.com/Tools%20and%20Software/Fixed%20Virtual%20Platforms)), a free platform provided by Arm. We also use [Shrinkwrap](https://shrinkwrap.docs.arm.com/en/latest/overview.html) to build the boot firmware of FVP. We merge Arm tracing tools with our setting to measure number of instructions executed by FVP's core during execution of target workloads. This repository only work on a x86 host with a Linux-based distribution (like Ubuntu).
+
+If you use the code/data in your research, please cite our [paper](#Paper).
  
-## 1 Initilization
-Download git and set up yout a git account on the platfrom
+## 1 Initialization
+Download Git and set up your a git account on the platform
 ```
 sudo apt install git
 git config --global user.name "<your-name>"
@@ -47,10 +49,14 @@ Build linux for both the hypervisor and the VM:
 
 Build the file systems of the hypervisor and the VM for a particular experiment (for example base experiment). 
 ```
+./scripts/download-model.sh -e base 
 ./scripts/build-buildroot-guest.sh -e base -c 1
 ./scripts/build-buildroot-host.sh -e base -c 1
 ```
-**Hint**: Each experiment has its own file system packages (reflected in `.\overlay\VM_buildroot_config_{experiment}`) and file overlays (reflected in `.\overlay\VM_overlay_{experiment}`).
+**Hint**: Each experiment has its own file system packages (see `.\overlay\VM_buildroot_config_{experiment}`) and overlays (see `.\overlay\VM_overlay_{experiment}`). To do every experiment, you need to rerun the above command with the desired setting. Currently, there are three experimental setting supported:
+1) `base`: Only a simple example of booting realm VMs (not working with tracing tools in section 4).
+2) `mobilenet`: An automated setting to get the evaluation measurements of the paper with regard to mobilenet. This setting only works with tracing tools enabled (see section 4).
+3) `gpt2`: Similar to `mobilenet` setting which works for GPT2 model. This setting requires your huggingface personal token to download GPT2 which needs to be provided as follows `./scripts/download-model.sh -e base -t [HF_TOKEN]`.
 
 ## 3 Boot FVP and create a VM
 To run FVP for a particular experiment (for example base experiment):
@@ -83,10 +89,10 @@ Next, you need to build a new Shrinkwrap instance with enabled tracing features 
 ./scripts/build-firmware.sh -s trace
 ``` 
 
-Now you can run the new instance with flag `-s trace` and the desired experiment:
+Now you can run the new instance with flag `-s trace` and the desired experiment. 
 
 ```
-./scripts/run-shrinkwrap.sh -e base -s trace
+./scripts/run-shrinkwrap.sh -e mobilenet -s mobilenet
 ```
 ### b) Adding markers to a code/script
 Briefly speaking, every marker is a special assembly code executed by the FVP core. The tracing platform writes these executed code along with other metadata information (e.g., total number of instruction executed by the core until that point) in the final trace file.
@@ -98,7 +104,7 @@ If tracing is enabled, after terminating the FVP, a `trace_{time}.txt` is saved 
 ```
 python3 ./tracing-scripts/count_pattern.py 0 ./trace-files/trace_{time}.txt
 ```
-
+The above script generates evaluation results of section 4.2 and appendix. 
 ## Paper
 **An Early Experience with Confidential Computing Architecture for On-Device Model Protection**,
 Sina Abdollahi, Mohammad Maheri, Sandra Siby, Marios Kogias, Hamed Haddadi
