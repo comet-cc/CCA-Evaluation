@@ -85,7 +85,7 @@ In order to evaluate CCA, we introduce a method to measure number of instrcution
 steps. a) Enabling tracing in FVP, b) Add markers to the code running in FVP (e.g. inference code), these markers guide the tracing platform to capture some information about the FVP at the time of running the marker, and c) Analizing the final tracing file using the python code we provide. Note that our method is adapted from the tracing method used in [Acai](https://github.com/sectrs-acai).
 
 ### a) Setup tracing with FVP
-First you need to download [Fast Models 11.28 for Linux x86](https://developer.arm.com/Tools%20and%20Software/Fast%20Models). You just need to create an accoount of Arm website, but the software is free of charge. 
+First you need to download [Fast Models 11.27 for Linux x86](https://developer.arm.com/Tools%20and%20Software/Fast%20Models). You just need to create an accoount of Arm website, but the software is free of charge. 
 After downloding, install the software by running `setup.sh` (for this step you may need to have a graphical terminal access to your system). Then, you should find two dynamic libraries `GenericTrace.so` and `ToggleMTIPlugin.so` at `FastModelsPortfolio_{version}/plugins/Linux64_GCC-{version}/`, copy them to `./Arm-tools` folder in the root of the repository. 
 
 Next, you need to build a new Shrinkwrap instance with enabled tracing features of FVP:
