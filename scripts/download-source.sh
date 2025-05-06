@@ -14,6 +14,9 @@ sudo apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 git clone -b cca-full/rmm-v1.0-eac5 https://git.gitlab.arm.com/linux-arm/linux-cca.git linux
 cp -r linux ./linux-guest
 git clone -b cca/rmm-v1.0-eac5 https://git.gitlab.arm.com/linux-arm/kvmtool-cca.git kvmtool
+cd kvmtool
+git apply ../patch/0001-Remove-size-limit-as-it-is-unnecessary.patch
+cd ..
 git clone -b 2023.08 https://github.com/buildroot/buildroot.git buildroot_host
 cp -r ./buildroot_host ./buildroot_guest
 

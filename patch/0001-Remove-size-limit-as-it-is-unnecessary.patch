@@ -1,0 +1,25 @@
+From 4b86a304b3bfa635686b3ab48d768743a65005e4 Mon Sep 17 00:00:00 2001
+From: SinaAb7 <sinaabdollahip@gmail.com>
+Date: Tue, 6 May 2025 17:08:33 +0100
+Subject: [PATCH] Remove size limit as it is unnecessary
+
+---
+ arm/kvm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arm/kvm.c b/arm/kvm.c
+index 9b99a34..40c25cb 100644
+--- a/arm/kvm.c
++++ b/arm/kvm.c
+@@ -154,7 +154,7 @@ bool kvm__arch_load_kernel_image(struct kvm *kvm, int fd_kernel, int fd_initrd,
+ 	 * Linux requires the initrd and dtb to be mapped inside lowmem,
+ 	 * so we can't just place them at the top of memory.
+ 	 */
+-	limit = kvm->ram_start + min(kvm->ram_size, (u64)SZ_256M) - 1;
++	limit = kvm->ram_start + min(kvm->ram_size, (u64)SZ_1G) - 1;
+ 
+ 	kern_offset = kvm__arch_get_kern_offset(kvm, fd_kernel);
+ 	pos = kvm->ram_start + kern_offset;
+-- 
+2.34.1
+
