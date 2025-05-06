@@ -4,3 +4,4 @@ marker
 memory_touch
 update_state
 check_state_get_addr
+gpt2.gguf

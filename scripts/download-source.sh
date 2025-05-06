@@ -20,3 +20,7 @@ cp -r ./buildroot_host ./buildroot_guest
 echo "----------------------Downloading FVP------------------------"
 wget -O $DIR/../tmp/FVP_Base_RevC-2xAEMvA_11.28_23_Linux64.tgz 'https://developer.arm.com/-/cdn-downloads/permalink/FVPs-Architecture/FM-11.28/FVP_Base_RevC-2xAEMvA_11.28_23_Linux64.tgz'
 tar -xzv -C $DIR/../FVP -f $DIR/../tmp/FVP_Base_RevC-2xAEMvA_11.28_23_Linux64.tgz
+
+git clone e02b597be3702174e7b47b44cd03e1da1553284b https://github.com/ggml-org/llama.cpp.git llamacpp
+cd llamacpp
+git checkout -f e02b597be3702174e7b47b44cd03e1da1553284b

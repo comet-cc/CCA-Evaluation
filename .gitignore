@@ -10,3 +10,4 @@ linux-guest/
 kvmtool/
 tmp/
 FVP/
+llamacpp/
