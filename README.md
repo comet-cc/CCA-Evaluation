@@ -1,7 +1,7 @@
 # Build & Evaluate Arm CCA 
 
 This repository aims to provide a comprehensive, user-friendly platform for building and simulating Arm Confidential Compute Architecture (CCA) software stack. Instructions for building all necessary components, along with customization options, are provided. To emulate the CCA-supported hardware, we use
-([Fixed Virtual Platform](https://developer.arm.com/Tools%20and%20Software/Fixed%20Virtual%20Platforms)), a free platform provided by Arm. We also use [Shrinkwrap](https://shrinkwrap.docs.arm.com/en/latest/overview.html) to build the boot firmware of FVP. We merge Arm tracing tools with our setting to measure number of instructions executed by FVP's core during execution of target workloads. This repository only work on a x86 host with a Linux-based distribution (like Ubuntu).
+([Fixed Virtual Platform](https://developer.arm.com/Tools%20and%20Software/Fixed%20Virtual%20Platforms)), a free platform provided by Arm. We also use [Shrinkwrap](https://shrinkwrap.docs.arm.com/en/latest/overview.html) to build the boot firmware of FVP. We merge Arm tracing tools with our setting to measure number of instructions executed by FVP's core during execution of target workloads. This repository has been only tested on a x86 host with a Linux-based distribution (like Ubuntu).
 
 If you use the code/data in your research, please cite our [paper](#Paper).
 
