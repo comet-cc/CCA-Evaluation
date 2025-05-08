@@ -7,9 +7,8 @@ If you use the code/data in your research, please cite our [paper](#Paper).
 
 ---
 ## 1 Initialization
-Download Git and set up your a git account on the platform
+Set up your git account on the platform
 ```
-sudo apt install git
 git config --global user.name "<your-name>"
 git config --global user.email "<your-email@example.com>"
 ```
