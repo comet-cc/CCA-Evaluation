@@ -46,16 +46,15 @@ Build other necessary firmware including the RMM and Trusted Monitor.
 Build linux for both the hypervisor and the VM:
 ```
 ./scripts/build-linux.sh -c 1
-./scripts/build-linux-guest.sh -c 1
 ```
 
-Build the file systems of the hypervisor and the VM for a particular experiment (for example base experiment). 
+Build the file systems of the hypervisor and the VM for a particular experiment (for example base experiment). Please be aware that building file systems is time consuming even in powerfull PCs. Before running the scripts please make sure you pick up the right experiment from the list below.
 ```
 ./scripts/download-model.sh -e base 
 ./scripts/build-buildroot-guest.sh -e base -c 1
 ./scripts/build-buildroot-host.sh -e base -c 1
 ```
-**Hint**: Each experiment has its own file system packages (see `.\overlay\VM_buildroot_config_{experiment}`) and overlays (see `.\overlay\VM_overlay_{experiment}`). To do every experiment, you need to rerun the above command with the desired setting. Currently, there are three experimental setting supported:
+**Hint**: Each experiment has its own file system packages (see `.\overlay\${experiment}\VM_buildroot_config_\${experiment}`) and overlays (see `.\overlay\${experiment}\VM_overlay_${experiment}`). To do every experiment, you need to rerun the above command with the desired setting. Currently, there are three experimental setting supported:
 1) `base`: Only a simple example of booting realm VMs (not working with tracing tools in section 4).
 2) `mobilenet`: An automated setting to get the evaluation measurements of the paper with regard to mobilenet. This setting only works with tracing tools enabled (see section 4).
 3) `gpt2`: Similar to `mobilenet` setting which works for GPT2 model. This setting requires your huggingface personal token to download GPT2 which needs to be provided as follows `./scripts/download-model.sh -e base -t [HF_TOKEN]`.
