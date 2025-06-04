@@ -236,10 +236,6 @@ do_package ()
 
 	if [ "$LINUX_RME_BUILD_ENABLED" == "1" ]; then
 		cp ${LINUX_PATH}/arch/arm64/boot/Image $OUTPUT_PLATFORM_DIR/Image
-		for dest in "$DIR"/../overlay/*/hypervisor_overlay_*/root/VM_image; do
-                        echo "Copying Image to $dest"
-                        cp -v "${LINUX_PATH}/arch/arm64/boot/Image" "$dest/Image-100"
-                done
 	fi
 }
 

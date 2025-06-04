@@ -51,6 +51,7 @@ Build supplementary binaries to be included in the target file systems. These bi
 Build Linux-CCA for both the hypervisor and the VM:
 ```
 ./scripts/build-linux.sh -c 1
+./scripts/build-linux-guest.sh -c 1
 ```
 ### b) Build CCA firmware and FVP's runtime setting
 Run the following command to build CCA firmware including the RMM and Trusted Monitor, as well as the FVP's runtime setting. Note that at this step two flags are provided. If you are interested in reproducing the paper's evaluation results or want to measure the number of instructions for any particular workload, you should use the `trace` flag. Otherwise, the `without-trace` flag provides a simple FVP without tracing tools. 
@@ -58,7 +59,7 @@ Run the following command to build CCA firmware including the RMM and Trusted Mo
 ./scripts/build-firmware.sh -s trace
 ```
 ### c) Build per-experiment file systems
-Following commands builds the file systems of the hypervisor and the VM for a particular experiment. Please be aware that building the file systems is time-consuming even on powerfull PCs (~40min in my pc). Thus, before running the scripts please make sure you pick up the right experiment from the list below. Currently, there are three experimental settings supported:
+Following commands builds the file systems of the hypervisor and the VM for a particular experiment. Please be aware that building the file systems is time-consuming even on powerfull PCs (~40min in my PC). Thus, before running the scripts please make sure you pick up the right experiment from the list below. Currently, there are three experimental settings supported:
 1) `base`: Only a simple example of booting realm VMs (only works with `-s without-trace` from step b).               
 2) `mobilenet`: An automated setting to get the evaluation measurements of the paper with regard to mobilenet. This setting only works with tracing tools enabled (`-s trace` from step b).                                                                          
 3) `gpt2`: Similar to `mobilenet` setting which works for GPT2 model. This setting requires your huggingface personal token to download GPT2 which needs to be provided as follows `./scripts/download-model.sh -e base -t [HF_TOKEN]`.
