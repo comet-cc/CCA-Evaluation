@@ -11,4 +11,4 @@ kvmtool/
 tmp/
 FVP/
 llamacpp/
-venv/
+venv-cca/

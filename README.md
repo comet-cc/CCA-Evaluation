@@ -38,7 +38,7 @@ To use necessary python packages you need to eigher set a virtual environment or
 ./scripts/set-venv.sh 
 ```
 
-Note that after creating the virtual environment, you should activate it for the rest of steps using `source venv/bin/activate`. 
+Note that after creating the virtual environment, you should activate it for the rest of steps using `source venv-cca/bin/activate`. 
 
 ---
 ## 2 Build binary files
