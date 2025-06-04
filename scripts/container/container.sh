@@ -39,7 +39,7 @@ HOST_DIR=""
 HOST_DIR1=""
 HOST_ARCH=$(uname -m)
 DOCKER_FILE="aemfvp-a-rme-${HOST_ARCH}"
-IMAGE_NAME="aemfvp-builder-test-main-reset-22"
+IMAGE_NAME="aemfvp-builder-test"
 OVERWRITE="false"
 COMMAND=""
 

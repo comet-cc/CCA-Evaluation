@@ -3,8 +3,9 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $DIR/..
 
-sudo apt-get install git netcat-openbsd python3 python3-pip telnet
-sudo pip3 install pyyaml termcolor tuxmake
+sudo apt-get install git netcat-openbsd telnet
+sudo apt install -y python3.10 python3.10-venv python3.10-dev
+#sudo pip3 install pyyaml termcolor tuxmake
 git clone https://git.gitlab.arm.com/tooling/shrinkwrap.git
 
 cd shrinkwrap

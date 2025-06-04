@@ -114,7 +114,7 @@ RUN set -e ;\
 # Make python3 default
 ln -s -f /usr/bin/python3 /usr/bin/python ;\
 # Setup user
-groupadd -g ${GID} ${USER};\
+groupadd ${USER};\
 useradd --no-log-init -m -s /bin/bash ${USER} --uid ${UID} --gid ${GID};\  
 echo "${USER}:${USER}" | chpasswd ;\
 echo "${USER} ALL = NOPASSWD: ALL" > /etc/sudoers.d/${USER} ;\                             
