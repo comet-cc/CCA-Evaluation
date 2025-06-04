@@ -1,4 +1,6 @@
+[![Badge Text](https://systex-workshop.github.io/2025/img/systexbadges-available.svg)](https://systex-workshop.github.io/2025/artifact.html)
 [![Badge Text](https://systex-workshop.github.io/2025/img/systexbadges-functional.svg)](https://systex-workshop.github.io/2025/artifact.html)
+[![Badge Text](https://systex-workshop.github.io/2025/img/systexbadges-reusable.svg)](https://systex-workshop.github.io/2025/artifact.html)
 # Build & Evaluate Arm CCA 
 
 This repository aims to provide a comprehensive, user-friendly platform for building and simulating Arm Confidential Compute Architecture (CCA) software stack. Instructions for building all necessary components, along with customization options, are provided. To emulate the CCA-supported hardware, we use
