@@ -118,7 +118,7 @@ The above script generates evaluation results of Section 4.2 and appendix.
 
 ---
 ## 6 Membership Inference Attack
-Code and guide to run membership inference attack are provided within another repository. Please check out [CCA-Membership-Inference](https://github.com/comet-cc/CCA-Membership-Inference) for further details. 
+Code and guide to run membership inference attack are provided within another repository. Please check out [CCA-Membership-Inference](https://github.com/comet-cc/CCA-Membership-Inference/tree/SysTEX25) for further details. 
 
 ---
 ## Paper
